@@ -8,6 +8,7 @@ public class Developer {
     private Long id;
     private String name;
     private String email;
+    private String phoneNumber;
     private String bio;
     private String city;
     private List<String> skills;
@@ -29,6 +30,15 @@ public class Developer {
         createdAt = LocalDateTime.now();
     }
 
+    public Developer(Long id, String name, String email, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.skills = new ArrayList<>();
+        this.phoneNumber = phoneNumber;
+        createdAt = LocalDateTime.now();
+    }
+
     // ─── Getters and Setters ─────────────────────────────────────
     public Long getId() {
         return id;
@@ -46,9 +56,9 @@ public class Developer {
         this.name = name;
     }
 
-//    public String getEmail() {
-//        return email;
-//    }
+    public String getEmail() {
+        return this.email;
+    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -68,9 +78,12 @@ public class Developer {
 
     // Is this method safe?
     public void setSkills(List<String> skills) {
-        if (skills == null) {
-            this.skills = skills;
+        if (this.skills == null) {
+            this.skills = new ArrayList<>();
         }
+
+        this.skills.addAll(skills);
+
     }
 
     public void addSkill(String skill) {
@@ -122,5 +135,13 @@ public class Developer {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

@@ -51,18 +51,41 @@ public class DeveloperController {
     }
 
     @PostMapping
-    public Developer addDeveloper(@RequestBody Developer developer) {
+    public ResponseEntity<Developer> addDeveloper(@RequestBody Developer developer) {
+
+        //Duplicate Check
+        for(Developer existingDeveloper : developers.values()) {
+            if (existingDeveloper.getEmail().equals(developer.getEmail()) ||
+                    existingDeveloper.getPhoneNumber().equals(developer.getPhoneNumber())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+        }
+
         developer.setId(idCounter.getAndIncrement());
         developers.put(developer.getId(), developer);
-        return developer;
+        return ResponseEntity.status(HttpStatus.CREATED).body(developer);
 
     }
 
-//    @PostMapping
+//    @PostMapping()
 //    public ResponseEntity<Developer> createDeveloper(@RequestBody Developer developer) {
 //        developer.setId(idCounter.getAndIncrement());
 //        developers.put(developer.getId(), developer);
 //        return ResponseEntity.status(HttpStatus.CREATED).build();
 //    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Developer> replaceDeveloper(@PathVariable Long id, @RequestBody Developer developer) {
+        if(!developers.containsKey(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        developers.remove(id);
+        developer.setId(id);
+        developers.put(id, developer);
+
+        return ResponseEntity.status(HttpStatus.OK).body(developer);
+    }
 
 }
